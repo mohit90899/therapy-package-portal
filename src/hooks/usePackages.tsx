@@ -5,14 +5,22 @@ import { dummyPackages } from '../utils/dummyData';
 import { useToast } from '@/components/ui/use-toast';
 
 export function usePackages() {
-  const [packages, setPackages] = useState<TherapyPackage[]>(dummyPackages);
+  const [packages, setPackages] = useState<TherapyPackage[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { toast } = useToast();
 
   useEffect(() => {
     // Simulate API call
     const loadPackages = setTimeout(() => {
-      setPackages(dummyPackages);
+      // Convert existing dummy packages to new format with sessionDetails
+      const updatedPackages = dummyPackages.map(pkg => ({
+        ...pkg,
+        sessionDetails: Array(pkg.sessions).fill(null).map(() => ({
+          duration: pkg.duration || 60,
+        })),
+      }));
+      
+      setPackages(updatedPackages);
       setLoading(false);
     }, 500);
 
@@ -54,9 +62,18 @@ export function usePackages() {
         pkg.id === id ? { ...pkg, status, updatedAt: new Date().toISOString() } : pkg
       )
     );
+    
+    const statusMessage = {
+      approved: "The package has been approved and is now available to clients.",
+      rejected: "The package has been rejected.",
+      pending: "The package has been submitted for approval.",
+      draft: "The package has been saved as a draft."
+    };
+    
     toast({
       title: `Package ${status.charAt(0).toUpperCase() + status.slice(1)}`,
-      description: `The package has been ${status}.`,
+      description: statusMessage[status],
+      variant: status === 'rejected' ? "destructive" : "default",
     });
   };
 

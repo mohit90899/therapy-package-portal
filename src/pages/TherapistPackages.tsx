@@ -139,7 +139,6 @@ const TherapistPackages = () => {
           </TabsContent>
           
           <TabsContent value="pending">
-            {/* Similar structure as "approved" tab */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {loading ? (
                 <p>Loading packages...</p>
@@ -162,7 +161,6 @@ const TherapistPackages = () => {
           </TabsContent>
           
           <TabsContent value="rejected">
-            {/* Similar structure as "approved" tab */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {loading ? (
                 <p>Loading packages...</p>

@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TherapyPackage } from "@/utils/types";
 import { cn } from "@/lib/utils";
+import { Clock, FileText } from "lucide-react";
 
 interface PackageCardProps {
   pkg: TherapyPackage;
@@ -20,7 +21,15 @@ const PackageCard = ({
   showStatus = false,
   className,
 }: PackageCardProps) => {
-  const { id, title, description, price, duration, sessions, therapistName, status, tags } = pkg;
+  const { id, title, description, price, sessions, therapistName, status, tags, sessionDetails } = pkg;
+
+  // Calculate total duration across all sessions
+  const totalDuration = sessionDetails?.reduce((sum, session) => sum + (session.duration || 0), 0) || 0;
+  
+  // Calculate average session duration
+  const avgDuration = sessionDetails?.length 
+    ? Math.round(totalDuration / sessionDetails.length) 
+    : 0;
 
   const getStatusColor = (status: TherapyPackage["status"]) => {
     switch (status) {
@@ -70,14 +79,25 @@ const PackageCard = ({
             <span className="font-medium">${price}</span>
           </div>
           <div className="flex flex-col">
-            <span className="text-xs text-muted-foreground">Duration</span>
-            <span className="font-medium">{duration} min</span>
+            <span className="text-xs text-muted-foreground">Avg. Duration</span>
+            <span className="font-medium">{avgDuration} min</span>
           </div>
           <div className="flex flex-col">
             <span className="text-xs text-muted-foreground">Sessions</span>
             <span className="font-medium">{sessions}</span>
           </div>
+          <div className="flex flex-col">
+            <span className="text-xs text-muted-foreground">Total Time</span>
+            <span className="font-medium">{Math.round(totalDuration / 60)} hrs</span>
+          </div>
         </div>
+        
+        {pkg.documents && pkg.documents.length > 0 && (
+          <div className="flex items-center text-xs text-muted-foreground mb-3">
+            <FileText className="h-3 w-3 mr-1" />
+            <span>{pkg.documents.length} document{pkg.documents.length !== 1 ? 's' : ''}</span>
+          </div>
+        )}
         
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-2">

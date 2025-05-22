@@ -10,6 +10,8 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import TherapistPackages from "./pages/TherapistPackages";
+import TherapistPackageNew from "./pages/TherapistPackageNew";
+import TherapistPackageEdit from "./pages/TherapistPackageEdit";
 import AdminApproval from "./pages/AdminApproval";
 import ClientPackages from "./pages/ClientPackages";
 
@@ -27,6 +29,8 @@ const App = () => (
           <Route path="/packages" element={<ClientPackages />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/therapist/packages" element={<TherapistPackages />} />
+          <Route path="/therapist/packages/new" element={<TherapistPackageNew />} />
+          <Route path="/therapist/packages/edit/:id" element={<TherapistPackageEdit />} />
           <Route path="/admin/approval" element={<AdminApproval />} />
           <Route path="/client/packages" element={<ClientPackages />} />
           <Route path="*" element={<NotFound />} />
