@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +23,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
 
+// Make sure the duration is required in the session schema
 const sessionSchema = z.object({
   duration: z.coerce.number().int().positive("Duration must be a positive integer"),
   title: z.string().optional(),
@@ -75,7 +75,7 @@ const PackageForm = ({
       description: initialData?.description || "",
       price: initialData?.price || 0,
       sessions: initialData?.sessions || 3,
-      sessionDetails: initialData?.sessionDetails || [{ duration: 60 }],
+      sessionDetails: initialData?.sessionDetails || [{ duration: 60 }], // Ensure duration is present
       image: initialData?.image || "",
       tags: initialData?.tags?.join(", ") || "",
       termsAndConditions: initialData?.termsAndConditions || "",
@@ -93,12 +93,19 @@ const PackageForm = ({
       ? values.tags.split(",").map(tag => tag.trim()).filter(Boolean)
       : [];
       
+    // Ensure all session details have a duration
+    const sessionDetails: TherapySession[] = values.sessionDetails.map(session => ({
+      duration: session.duration, // This is now required
+      title: session.title,
+      description: session.description,
+    }));
+      
     onSubmit({
       title: values.title,
       description: values.description,
       price: values.price,
       sessions: values.sessions,
-      sessionDetails: values.sessionDetails,
+      sessionDetails: sessionDetails,
       image: values.image,
       tags: tagsArray,
       therapistId: currentUser.id,

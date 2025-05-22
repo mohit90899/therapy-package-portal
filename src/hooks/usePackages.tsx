@@ -12,15 +12,7 @@ export function usePackages() {
   useEffect(() => {
     // Simulate API call
     const loadPackages = setTimeout(() => {
-      // Convert existing dummy packages to new format with sessionDetails
-      const updatedPackages = dummyPackages.map(pkg => ({
-        ...pkg,
-        sessionDetails: Array(pkg.sessions).fill(null).map(() => ({
-          duration: pkg.duration || 60,
-        })),
-      }));
-      
-      setPackages(updatedPackages);
+      setPackages(dummyPackages);
       setLoading(false);
     }, 500);
 

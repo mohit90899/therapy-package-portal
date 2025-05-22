@@ -31,8 +31,14 @@ export const dummyPackages: TherapyPackage[] = [
     title: 'Stress Relief Package',
     description: 'A comprehensive package designed to help you manage stress and anxiety through proven therapeutic techniques.',
     price: 299,
-    duration: 60,
     sessions: 5,
+    sessionDetails: [
+      { duration: 60, title: "Initial Assessment" },
+      { duration: 60, title: "Stress Identification" },
+      { duration: 60, title: "Coping Mechanisms" },
+      { duration: 60, title: "Practical Applications" },
+      { duration: 60, title: "Progress Review" }
+    ],
     therapistId: '1',
     therapistName: 'John Therapist',
     status: 'approved',
@@ -46,8 +52,13 @@ export const dummyPackages: TherapyPackage[] = [
     title: 'Couples Therapy',
     description: 'Strengthen your relationship with your partner through guided sessions focusing on communication and understanding.',
     price: 399,
-    duration: 90,
     sessions: 4,
+    sessionDetails: [
+      { duration: 90, title: "Relationship Assessment" },
+      { duration: 90, title: "Communication Techniques" },
+      { duration: 90, title: "Conflict Resolution" },
+      { duration: 90, title: "Building Intimacy" }
+    ],
     therapistId: '1',
     therapistName: 'John Therapist',
     status: 'approved',
@@ -61,8 +72,15 @@ export const dummyPackages: TherapyPackage[] = [
     title: 'Depression Management',
     description: 'Learn effective strategies to manage depressive symptoms and improve your overall mental wellbeing.',
     price: 349,
-    duration: 60,
     sessions: 6,
+    sessionDetails: [
+      { duration: 60, title: "Clinical Assessment" },
+      { duration: 60, title: "Cognitive Restructuring" },
+      { duration: 60, title: "Behavioral Activation" },
+      { duration: 60, title: "Mindfulness Techniques" },
+      { duration: 60, title: "Social Support Systems" },
+      { duration: 60, title: "Relapse Prevention" }
+    ],
     therapistId: '1',
     therapistName: 'John Therapist',
     status: 'pending',
