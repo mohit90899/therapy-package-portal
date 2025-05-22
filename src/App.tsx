@@ -15,29 +15,39 @@ import TherapistPackageEdit from "./pages/TherapistPackageEdit";
 import AdminApproval from "./pages/AdminApproval";
 import ClientPackages from "./pages/ClientPackages";
 
-const queryClient = new QueryClient();
+// Create a new QueryClient instance
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/packages" element={<ClientPackages />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/therapist/packages" element={<TherapistPackages />} />
-          <Route path="/therapist/packages/new" element={<TherapistPackageNew />} />
-          <Route path="/therapist/packages/edit/:id" element={<TherapistPackageEdit />} />
-          <Route path="/admin/approval" element={<AdminApproval />} />
-          <Route path="/client/packages" element={<ClientPackages />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/packages" element={<ClientPackages />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/therapist/packages" element={<TherapistPackages />} />
+            <Route path="/therapist/packages/new" element={<TherapistPackageNew />} />
+            <Route path="/therapist/packages/edit/:id" element={<TherapistPackageEdit />} />
+            <Route path="/admin/approval" element={<AdminApproval />} />
+            <Route path="/client/packages" element={<ClientPackages />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
+  );
+};
 
 export default App;

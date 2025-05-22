@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import MainLayout from "@/components/Layout/MainLayout";
 import PackageCard from "@/components/PackageCard";
 import { Input } from "@/components/ui/input";
@@ -9,7 +10,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { usePackages } from "@/hooks/usePackages";
 import { TherapyPackage, TherapySession } from "@/utils/types";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Clock, FileUp } from "lucide-react";
+import { Clock, FileUp, Search, X, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const ClientPackages = () => {
   const { toast } = useToast();
@@ -35,6 +37,12 @@ const ClientPackages = () => {
     if (pkg) {
       setSelectedPackage(pkg);
       setBookingDialogOpen(true);
+    } else {
+      toast({
+        title: "Error",
+        description: "Package not found. Please try again.",
+        variant: "destructive"
+      });
     }
   };
   
@@ -48,6 +56,13 @@ const ClientPackages = () => {
       toast({
         title: "Voucher Applied!",
         description: "You received a 20% discount.",
+      });
+    } else if (voucherCode.toLowerCase() === "discount10") {
+      setVoucherApplied(true);
+      setDiscountAmount(10);
+      toast({
+        title: "Voucher Applied!",
+        description: "You received a 10% discount.",
       });
     } else {
       toast({
@@ -69,6 +84,24 @@ const ClientPackages = () => {
     setDiscountAmount(0);
   };
 
+  if (loading) {
+    return (
+      <MainLayout>
+        <div className="container mx-auto py-12 text-center">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 w-1/3 bg-gray-200 rounded mx-auto"></div>
+            <div className="h-4 w-2/3 bg-gray-200 rounded mx-auto"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="bg-gray-100 rounded-lg h-64"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout>
       <div className="container mx-auto py-12 fade-in">
@@ -81,28 +114,29 @@ const ClientPackages = () => {
         
         <div className="max-w-xl mx-auto mb-12">
           <div className="relative">
-            <Input 
-              placeholder="Search packages by name, description, or therapist..."
-              className="pr-10"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <Button
-              variant="ghost"
-              className="absolute right-0 top-0 h-full"
-              onClick={() => setSearchTerm("")}
-              disabled={!searchTerm}
-            >
-              {searchTerm && "Clear"}
-            </Button>
+            <div className="flex">
+              <div className="relative flex-grow">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input 
+                  placeholder="Search packages by name, therapist or tags..."
+                  className="pl-10 pr-10"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {searchTerm && (
+                  <button
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    onClick={() => setSearchTerm("")}
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
         
-        {loading ? (
-          <div className="text-center py-12">
-            <p>Loading packages...</p>
-          </div>
-        ) : filteredPackages.length > 0 ? (
+        {filteredPackages.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPackages.map(pkg => (
               <PackageCard 
@@ -114,13 +148,30 @@ const ClientPackages = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium mb-2">No packages found</h3>
-            <p className="text-muted-foreground">
-              {searchTerm 
-                ? "Try adjusting your search criteria." 
-                : "There are currently no packages available."}
-            </p>
+          <div className="text-center py-12 border rounded-lg bg-gray-50">
+            {searchTerm ? (
+              <>
+                <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">No packages found</h3>
+                <p className="text-muted-foreground mb-4">
+                  No results match "{searchTerm}". Try adjusting your search.
+                </p>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setSearchTerm("")}
+                >
+                  Clear Search
+                </Button>
+              </>
+            ) : (
+              <>
+                <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">No packages available</h3>
+                <p className="text-muted-foreground">
+                  There are currently no therapy packages available. Please check back later.
+                </p>
+              </>
+            )}
           </div>
         )}
       </div>
