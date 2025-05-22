@@ -24,8 +24,11 @@ interface SidebarLinkProps {
 }
 
 const DashboardSidebar = () => {
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
   const location = useLocation();
+  
+  // Determine if the sidebar is collapsed based on state
+  const collapsed = state === "collapsed";
   
   const isActive = (path: string) => location.pathname === path;
   
@@ -71,7 +74,7 @@ const DashboardSidebar = () => {
         "border-r h-screen transition-all duration-300 ease-in-out", 
         collapsed ? "w-16" : "w-64"
       )}
-      collapsible
+      collapsible="icon"
     >
       <div className="p-4 flex items-center justify-center mb-4">
         {collapsed ? (
@@ -96,7 +99,7 @@ const DashboardSidebar = () => {
       <SidebarTrigger className="absolute right-4 top-4" />
       
       <SidebarContent>
-        <SidebarGroup defaultOpen>
+        <SidebarGroup>
           <SidebarGroupLabel className={cn(collapsed && "sr-only")}>
             Navigation
           </SidebarGroupLabel>
