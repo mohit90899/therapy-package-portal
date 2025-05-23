@@ -7,14 +7,24 @@ export interface User {
   email: string;
   role: UserRole;
   profileImage?: string;
+  bio?: string;
+  specialties?: string[];
+  phone?: string;
+  address?: string;
 }
 
 export type PackageStatus = "draft" | "pending" | "approved" | "rejected";
 
 export interface TherapySession {
-  duration: number; // in minutes
+  duration: number; // in minutes (required field)
   title?: string;
   description?: string;
+  completed?: boolean;
+  scheduled?: boolean;
+  scheduledDate?: string;
+  zoomLink?: string;
+  recordingUrl?: string;
+  notes?: string;
 }
 
 export interface TherapyPackage {
@@ -48,6 +58,7 @@ export interface Booking {
   status: "active" | "completed" | "expired";
   voucherCode?: string;
   voucherDiscount?: number;
+  sessions?: TherapySession[]; // Track individual sessions within a booking
 }
 
 export interface Session {
@@ -67,4 +78,14 @@ export interface Voucher {
   usageLimit?: number;
   usageCount: number;
   isActive: boolean;
+}
+
+export interface ZoomMeeting {
+  id: string;
+  topic: string;
+  startTime: string;
+  duration: number;
+  joinUrl: string;
+  password: string;
+  sessionId: string;
 }
