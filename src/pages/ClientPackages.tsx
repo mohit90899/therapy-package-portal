@@ -8,9 +8,13 @@ import { Button } from "@/components/ui/button";
 import { usePackages } from "@/hooks/usePackages";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TherapyPackage } from "@/utils/types";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { PackageIcon } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const ClientPackages = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { getApprovedPackages, loading } = usePackages();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -37,6 +41,10 @@ const ClientPackages = () => {
   
   const handlePurchase = (pkg: TherapyPackage) => {
     // Navigate to the payment page with the selected package ID
+    toast({
+      title: "Package Selected",
+      description: "Navigating to payment page",
+    });
     navigate(`/payment?packageId=${pkg.id}`);
   };
   
@@ -60,28 +68,31 @@ const ClientPackages = () => {
             />
             
             <div className="flex-grow flex justify-end">
-              <Tabs defaultValue="all">
-                <TabsList>
-                  <TabsTrigger value="all" onClick={() => setSelectedTag(null)}>
-                    All Packages
-                  </TabsTrigger>
-                  {allTags.map(tag => (
-                    <TabsTrigger 
-                      key={tag} 
-                      value={tag}
-                      onClick={() => setSelectedTag(tag)}
-                    >
-                      {tag}
+              {allTags.length > 0 && (
+                <Tabs defaultValue="all" className="w-full md:w-auto">
+                  <TabsList className="overflow-x-auto">
+                    <TabsTrigger value="all" onClick={() => setSelectedTag(null)}>
+                      All Packages
                     </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
+                    {allTags.map(tag => (
+                      <TabsTrigger 
+                        key={tag} 
+                        value={tag}
+                        onClick={() => setSelectedTag(tag)}
+                      >
+                        {tag}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Tabs>
+              )}
             </div>
           </div>
         </div>
         
         {loading ? (
           <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
             <p>Loading packages...</p>
           </div>
         ) : filteredPackages.length > 0 ? (
@@ -97,27 +108,35 @@ const ClientPackages = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <h3 className="text-lg font-medium">No packages found</h3>
-            <p className="text-muted-foreground">
-              {searchQuery || selectedTag
-                ? "Try adjusting your search filters"
-                : "No packages are currently available"}
-            </p>
-            
-            {(searchQuery || selectedTag) && (
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedTag(null);
-                }}
-                className="mt-4"
-              >
-                Clear Filters
-              </Button>
-            )}
+            <div className="bg-muted rounded-lg p-8 max-w-md mx-auto">
+              <PackageIcon className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium">No packages found</h3>
+              <p className="text-muted-foreground mb-6">
+                {searchQuery || selectedTag
+                  ? "Try adjusting your search filters"
+                  : "No packages are currently available"}
+              </p>
+              
+              {(searchQuery || selectedTag) && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedTag(null);
+                  }}
+                >
+                  Clear Filters
+                </Button>
+              )}
+            </div>
           </div>
         )}
+        
+        <Alert className="mt-12 bg-muted">
+          <AlertDescription>
+            Need help finding the right therapy package? Contact our support team for assistance.
+          </AlertDescription>
+        </Alert>
       </div>
     </MainLayout>
   );

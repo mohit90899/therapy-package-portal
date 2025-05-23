@@ -89,6 +89,10 @@ const Profile = () => {
     }, 1000);
   }
 
+  // Determine which tabs to show based on user role
+  const showProfessionalTab = currentUser.role === 'therapist';
+  const showBookingsTab = currentUser.role === 'client';
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -124,8 +128,11 @@ const Profile = () => {
               <TabsList className="mb-6">
                 <TabsTrigger value="general">General</TabsTrigger>
                 <TabsTrigger value="password">Password</TabsTrigger>
-                {currentUser.role === 'therapist' && (
+                {showProfessionalTab && (
                   <TabsTrigger value="professional">Professional Info</TabsTrigger>
+                )}
+                {showBookingsTab && (
+                  <TabsTrigger value="bookings">My Bookings</TabsTrigger>
                 )}
                 <TabsTrigger value="notifications">Notifications</TabsTrigger>
               </TabsList>
@@ -262,7 +269,27 @@ const Profile = () => {
                 </Card>
               </TabsContent>
               
-              {currentUser.role === 'therapist' && (
+              {showBookingsTab && (
+                <TabsContent value="bookings">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>My Therapy Sessions</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <p className="text-sm text-muted-foreground">
+                          View and manage your booked therapy sessions here.
+                        </p>
+                        <Button asChild>
+                          <Link to="/client/bookings">Go to My Bookings</Link>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              )}
+              
+              {showProfessionalTab && (
                 <TabsContent value="professional">
                   <Card>
                     <CardHeader>

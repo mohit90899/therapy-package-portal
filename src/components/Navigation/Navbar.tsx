@@ -8,8 +8,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { currentUser } from "@/utils/dummyData";
+import { PackageIcon, UserIcon, CalendarIcon, LayoutDashboardIcon, LogOutIcon } from "lucide-react";
 
 interface NavbarProps {
   user?: User;
@@ -54,14 +56,58 @@ const Navbar = ({ user = currentUser }: NavbarProps) => {
               </DropdownMenuTrigger>
               
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem>
-                  <Link to="/dashboard" className="w-full">Dashboard</Link>
+                {user.role === "client" && (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/dashboard" className="w-full flex items-center">
+                        <LayoutDashboardIcon className="h-4 w-4 mr-2" /> Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/client/packages" className="w-full flex items-center">
+                        <PackageIcon className="h-4 w-4 mr-2" /> Browse Packages
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/client/bookings" className="w-full flex items-center">
+                        <CalendarIcon className="h-4 w-4 mr-2" /> My Bookings
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+                
+                {user.role === "therapist" && (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/dashboard" className="w-full flex items-center">
+                        <LayoutDashboardIcon className="h-4 w-4 mr-2" /> Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/therapist/packages" className="w-full flex items-center">
+                        <PackageIcon className="h-4 w-4 mr-2" /> My Packages
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/therapist/calendar" className="w-full flex items-center">
+                        <CalendarIcon className="h-4 w-4 mr-2" /> Calendar
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+                
+                <DropdownMenuItem asChild>
+                  <Link to="/profile" className="w-full flex items-center">
+                    <UserIcon className="h-4 w-4 mr-2" /> Profile
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/profile" className="w-full">Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-destructive">
-                  <button className="w-full text-left">Logout</button>
+                
+                <DropdownMenuSeparator />
+                
+                <DropdownMenuItem className="text-destructive cursor-pointer">
+                  <div className="w-full flex items-center">
+                    <LogOutIcon className="h-4 w-4 mr-2" /> Logout
+                  </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

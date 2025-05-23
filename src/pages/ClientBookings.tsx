@@ -1,15 +1,15 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Calendar, Video, CheckCircle } from "lucide-react";
+import { Calendar, Video, CheckCircle, Clock, AlertCircle } from "lucide-react";
 import { dummyBookings } from "@/utils/dummyData";
-import { TherapySession } from "@/utils/types";
+import { TherapySession, Booking } from "@/utils/types";
 import { useToast } from "@/components/ui/use-toast";
 
 const ClientBookings = () => {
@@ -34,13 +34,51 @@ const ClientBookings = () => {
   };
   
   const handleJoinSession = (zoomLink: string) => {
-    // Open Zoom link in new tab
-    window.open(zoomLink, '_blank');
+    // Check if the session is starting within 15 minutes
+    const now = new Date();
+    const sessionTime = new Date(); // This would ideally come from the session object
+    sessionTime.setMinutes(sessionTime.getMinutes() + 10); // Mock session starting in 10 minutes
     
-    toast({
-      title: "Session Joined",
-      description: "You've successfully joined the therapy session.",
-    });
+    if (sessionTime > now) {
+      // Open Zoom link in new tab
+      window.open(zoomLink, '_blank');
+      
+      toast({
+        title: "Session Joined",
+        description: "You've successfully joined the therapy session.",
+      });
+    } else {
+      toast({
+        title: "Session Not Available Yet",
+        description: "This session is not currently active or has already ended.",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  // Helper function to determine if a session can be joined based on schedule
+  const canJoinSession = (session: TherapySession) => {
+    if (!session.scheduled || !session.scheduledDate) return false;
+    
+    const sessionTime = new Date(session.scheduledDate);
+    const now = new Date();
+    
+    // Allow joining 15 minutes before and until 1 hour after the scheduled time
+    const earliestJoinTime = new Date(sessionTime);
+    earliestJoinTime.setMinutes(earliestJoinTime.getMinutes() - 15);
+    
+    const latestJoinTime = new Date(sessionTime);
+    latestJoinTime.setMinutes(latestJoinTime.getMinutes() + 60);
+    
+    return now >= earliestJoinTime && now <= latestJoinTime;
+  };
+  
+  // Helper to calculate percentage of used sessions
+  const calculateProgress = (booking: Booking) => {
+    const totalSessions = booking.sessions?.length || 0;
+    const completedSessions = booking.sessions?.filter(s => s.completed).length || 0;
+    
+    return totalSessions > 0 ? (completedSessions / totalSessions) * 100 : 0;
   };
   
   return (
@@ -66,13 +104,16 @@ const ClientBookings = () => {
                 <CardHeader>
                   <div className="flex flex-col md:flex-row md:items-center justify-between">
                     <div>
-                      <CardTitle>{dummyBookings.find(b => b.id === booking.id)?.sessions?.[0]?.title.split(' ')[0]}'s Package</CardTitle>
+                      <CardTitle>{booking.sessions?.[0]?.title || "Therapy Package"}</CardTitle>
                       <CardDescription>
                         {booking.sessionsRemaining} of {booking.sessions?.length} sessions remaining
                       </CardDescription>
                     </div>
                     <div className="mt-2 md:mt-0">
-                      <Badge variant="outline">Active until {new Date(booking.expiryDate).toLocaleDateString()}</Badge>
+                      <Badge variant="outline" className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        Active until {new Date(booking.expiryDate).toLocaleDateString()}
+                      </Badge>
                     </div>
                   </div>
                 </CardHeader>
@@ -81,9 +122,7 @@ const ClientBookings = () => {
                     <div className="w-full bg-muted rounded-full h-2">
                       <div 
                         className="bg-primary rounded-full h-2" 
-                        style={{ 
-                          width: `${100 - ((booking.sessionsRemaining / (booking.sessions?.length || 1)) * 100)}%` 
-                        }}
+                        style={{ width: `${calculateProgress(booking)}%` }}
                       ></div>
                     </div>
                     
@@ -108,7 +147,7 @@ const ClientBookings = () => {
                                 </div>
                                 
                                 <div>
-                                  <div className="font-medium">{session.title}</div>
+                                  <div className="font-medium">{session.title || `Session ${index + 1}`}</div>
                                   <div className="text-sm text-muted-foreground">{session.duration} minutes</div>
                                   {session.scheduledDate && (
                                     <div className="text-sm mt-1">{formatDate(session.scheduledDate)}</div>
@@ -134,7 +173,7 @@ const ClientBookings = () => {
                                 ) : session.scheduled ? (
                                   <div className="space-y-2">
                                     <Badge>Scheduled</Badge>
-                                    {session.zoomLink && (
+                                    {session.zoomLink && canJoinSession(session) ? (
                                       <Button 
                                         variant="default" 
                                         size="sm"
@@ -144,6 +183,10 @@ const ClientBookings = () => {
                                         <Video className="h-4 w-4 mr-2" />
                                         Join Session
                                       </Button>
+                                    ) : (
+                                      <div className="text-xs text-muted-foreground">
+                                        Available to join 15 minutes before start time
+                                      </div>
                                     )}
                                   </div>
                                 ) : (
@@ -158,12 +201,15 @@ const ClientBookings = () => {
                       </div>
                     </div>
                     
-                    <Alert>
-                      <AlertTitle>Package Information</AlertTitle>
-                      <AlertDescription>
-                        This package is valid until {new Date(booking.expiryDate).toLocaleDateString()}. 
-                        Please schedule all sessions before the expiry date.
-                      </AlertDescription>
+                    <Alert className="flex gap-2 items-start">
+                      <AlertCircle className="h-5 w-5 mt-0.5" />
+                      <div>
+                        <AlertTitle>Package Information</AlertTitle>
+                        <AlertDescription>
+                          This package is valid until {new Date(booking.expiryDate).toLocaleDateString()}. 
+                          Please schedule all sessions before the expiry date.
+                        </AlertDescription>
+                      </div>
                     </Alert>
                   </div>
                 </CardContent>
@@ -172,9 +218,12 @@ const ClientBookings = () => {
             
             {bookings.filter(booking => booking.status === 'active').length === 0 && (
               <div className="text-center py-12">
-                <h3 className="text-lg font-medium">No active bookings</h3>
-                <p className="text-muted-foreground mt-1 mb-6">You don't have any active therapy packages</p>
-                <Button onClick={() => navigate("/packages")}>Browse Packages</Button>
+                <div className="bg-muted rounded-lg p-8 max-w-md mx-auto">
+                  <Calendar className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-medium">No active bookings</h3>
+                  <p className="text-muted-foreground mt-1 mb-6">You don't have any active therapy packages</p>
+                  <Button onClick={() => navigate("/packages")}>Browse Packages</Button>
+                </div>
               </div>
             )}
           </TabsContent>
@@ -191,14 +240,35 @@ const ClientBookings = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <p>View session details and recordings here</p>
+                      <div className="space-y-4">
+                        <div className="bg-muted p-4 rounded-md">
+                          <h4 className="font-medium mb-2">Session Recordings</h4>
+                          {booking.sessions?.filter(s => s.recordingUrl).map((session, idx) => (
+                            <div key={idx} className="flex items-center justify-between py-2 border-b last:border-0">
+                              <span>{session.title || `Session ${idx + 1}`}</span>
+                              <Button variant="outline" size="sm">View Recording</Button>
+                            </div>
+                          ))}
+                          
+                          {!booking.sessions?.some(s => s.recordingUrl) && (
+                            <p className="text-sm text-muted-foreground">No recordings available for this package</p>
+                          )}
+                        </div>
+                        
+                        <Button variant="outline" asChild>
+                          <Link to="/packages">Book Another Package</Link>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))
               ) : (
                 <div className="text-center py-12">
-                  <h3 className="text-lg font-medium">No completed packages</h3>
-                  <p className="text-muted-foreground">You haven't completed any packages yet</p>
+                  <div className="bg-muted rounded-lg p-8 max-w-md mx-auto">
+                    <CheckCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="text-lg font-medium">No completed packages</h3>
+                    <p className="text-muted-foreground">You haven't completed any packages yet</p>
+                  </div>
                 </div>
               )}
             </div>
@@ -216,14 +286,29 @@ const ClientBookings = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <p>Package expired on {new Date(booking.expiryDate).toLocaleDateString()}</p>
+                      <div className="space-y-4">
+                        <Alert variant="destructive">
+                          <AlertTitle>Package Expired</AlertTitle>
+                          <AlertDescription>
+                            This package expired on {new Date(booking.expiryDate).toLocaleDateString()}.
+                            {booking.sessionsRemaining > 0 && ` You had ${booking.sessionsRemaining} unused sessions.`}
+                          </AlertDescription>
+                        </Alert>
+                        
+                        <Button asChild>
+                          <Link to="/packages">Browse New Packages</Link>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))
               ) : (
                 <div className="text-center py-12">
-                  <h3 className="text-lg font-medium">No expired packages</h3>
-                  <p className="text-muted-foreground">You don't have any expired packages</p>
+                  <div className="bg-muted rounded-lg p-8 max-w-md mx-auto">
+                    <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="text-lg font-medium">No expired packages</h3>
+                    <p className="text-muted-foreground">You don't have any expired packages</p>
+                  </div>
                 </div>
               )}
             </div>
