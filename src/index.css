@@ -14,56 +14,56 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 196 64% 44%;
+    --primary: 18 58% 33%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 162 73% 46%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 35 25% 85%;
+    --secondary-foreground: 18 58% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 35 15% 96%;
+    --muted-foreground: 25 5% 45%;
 
-    --accent: 196 64% 95%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 35 25% 90%;
+    --accent-foreground: 18 58% 25%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 196 64% 44%;
+    --border: 35 15% 88%;
+    --input: 35 15% 88%;
+    --ring: 18 58% 33%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 18 20% 8%;
+    --foreground: 35 25% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 18 20% 10%;
+    --card-foreground: 35 25% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 18 20% 8%;
+    --popover-foreground: 35 25% 95%;
 
-    --primary: 196 64% 44%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 18 58% 45%;
+    --primary-foreground: 18 20% 8%;
 
-    --secondary: 162 73% 46%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 18 20% 15%;
+    --secondary-foreground: 35 25% 85%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 18 15% 15%;
+    --muted-foreground: 35 10% 65%;
 
-    --accent: 196 64% 15%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 18 20% 20%;
+    --accent-foreground: 35 25% 85%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 196 64% 44%;
+    --border: 18 15% 20%;
+    --input: 18 15% 20%;
+    --ring: 18 58% 45%;
   }
 }
 
@@ -83,7 +83,7 @@
 
 .package-card-hover:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 20px rgba(135, 62, 35, 0.15);
 }
 
 .fade-in {
