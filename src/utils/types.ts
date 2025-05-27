@@ -25,6 +25,7 @@ export interface TherapySession {
   zoomLink?: string;
   recordingUrl?: string;
   notes?: string;
+  sessionIndex?: number; // Track which session this is in the package
 }
 
 export interface TherapyPackage {
@@ -46,19 +47,45 @@ export interface TherapyPackage {
     title: string;
     url: string;
   }[];
+  benefits?: string[]; // Added for package benefits
+}
+
+export interface SessionCredit {
+  id: string;
+  bookingId: string;
+  packageId: string;
+  sessionIndex: number;
+  status: "available" | "scheduled" | "completed" | "cancelled";
+  scheduledDate?: string;
+  therapistId: string;
+  duration: number;
+  title?: string;
+  description?: string;
+  zoomLink?: string;
+  recordingUrl?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Booking {
   id: string;
   packageId: string;
+  packageTitle: string;
   clientId: string;
+  therapistId: string;
+  therapistName: string;
   purchaseDate: string;
-  sessionsRemaining: number;
+  totalSessions: number;
+  usedSessions: number;
+  remainingSessions: number;
   expiryDate: string;
   status: "active" | "completed" | "expired";
   voucherCode?: string;
   voucherDiscount?: number;
-  sessions?: TherapySession[]; // Track individual sessions within a booking
+  sessionCredits: SessionCredit[]; // Track individual session credits
+  totalAmount: number;
+  finalAmount: number; // After voucher discount
 }
 
 export interface Session {
@@ -72,12 +99,15 @@ export interface Session {
 }
 
 export interface Voucher {
+  id: string;
   code: string;
   discount: number; // Percentage discount
   expiryDate?: string;
   usageLimit?: number;
   usageCount: number;
   isActive: boolean;
+  description?: string;
+  minAmount?: number; // Minimum order amount to apply voucher
 }
 
 export interface ZoomMeeting {
@@ -88,4 +118,20 @@ export interface ZoomMeeting {
   joinUrl: string;
   password: string;
   sessionId: string;
+}
+
+export interface NotificationSettings {
+  bookingConfirmation: boolean;
+  sessionReminder: boolean;
+  sessionCompletion: boolean;
+  packageExpiry: boolean;
+  newPackages: boolean;
+}
+
+export interface AdminStats {
+  totalBookings: number;
+  activePackages: number;
+  totalRevenue: number;
+  completedSessions: number;
+  pendingApprovals: number;
 }

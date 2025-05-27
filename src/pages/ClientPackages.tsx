@@ -3,11 +3,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "@/components/Layout/MainLayout";
 import PackageCard from "@/components/PackageCard";
+import PackageDetailsModal from "@/components/PackageDetailsModal";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { usePackages } from "@/hooks/usePackages";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TherapyPackage } from "@/utils/types";
+import { TherapyPackage, Voucher } from "@/utils/types";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { PackageIcon } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -18,6 +19,8 @@ const ClientPackages = () => {
   const { getApprovedPackages, loading } = usePackages();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<TherapyPackage | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const allPackages = getApprovedPackages();
   
@@ -39,13 +42,28 @@ const ClientPackages = () => {
     return matchesSearch && matchesTag;
   });
   
-  const handlePurchase = (pkg: TherapyPackage) => {
-    // Navigate to the payment page with the selected package ID
+  const handleViewPackage = (pkg: TherapyPackage) => {
+    setSelectedPackage(pkg);
+    setIsModalOpen(true);
+  };
+  
+  const handlePurchase = (packageId: string, voucher?: Voucher | null) => {
+    // Navigate to the payment page with the selected package ID and voucher
+    const params = new URLSearchParams({
+      packageId: packageId
+    });
+    
+    if (voucher) {
+      params.append('voucherCode', voucher.code);
+      params.append('discount', voucher.discount.toString());
+    }
+    
     toast({
       title: "Package Selected",
-      description: "Navigating to payment page",
+      description: "Navigating to payment page...",
     });
-    navigate(`/payment?packageId=${pkg.id}`);
+    
+    navigate(`/payment?${params.toString()}`);
   };
   
   return (
@@ -101,8 +119,8 @@ const ClientPackages = () => {
               <PackageCard
                 key={pkg.id}
                 pkg={pkg}
-                actionText="Purchase Package"
-                onAction={() => handlePurchase(pkg)}
+                actionText="View Details"
+                onAction={() => handleViewPackage(pkg)}
               />
             ))}
           </div>
@@ -137,6 +155,18 @@ const ClientPackages = () => {
             Need help finding the right therapy package? Contact our support team for assistance.
           </AlertDescription>
         </Alert>
+
+        {selectedPackage && (
+          <PackageDetailsModal
+            isOpen={isModalOpen}
+            onClose={() => {
+              setIsModalOpen(false);
+              setSelectedPackage(null);
+            }}
+            package={selectedPackage}
+            onPurchase={handlePurchase}
+          />
+        )}
       </div>
     </MainLayout>
   );

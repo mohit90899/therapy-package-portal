@@ -6,10 +6,9 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, CalendarIcon, Clock } from "lucide-react";
+import { AlertCircle, CalendarIcon, Clock, User } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/components/ui/use-toast";
-import { dummyBookings } from "@/utils/dummyData";
 
 const BookingCalendar = () => {
   const [searchParams] = useSearchParams();
@@ -17,10 +16,24 @@ const BookingCalendar = () => {
   const { toast } = useToast();
   
   const bookingId = searchParams.get("bookingId");
-  const sessionIndex = parseInt(searchParams.get("sessionIndex") || "0");
+  const creditId = searchParams.get("creditId");
+  const isReschedule = searchParams.get("reschedule") === "true";
   
-  const booking = dummyBookings.find(b => b.id === bookingId);
-  const session = booking?.sessions?.[sessionIndex];
+  // Mock data - in real app, this would come from API
+  const mockBooking = {
+    id: bookingId,
+    packageTitle: "Pre-Wedding Therapy Package",
+    therapistName: "Dr. Sarah Johnson",
+    therapistId: "therapist1"
+  };
+  
+  const mockCredit = {
+    id: creditId,
+    title: "Conflict Resolution",
+    description: "Managing disagreements constructively",
+    duration: 60,
+    sessionIndex: 2
+  };
   
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -47,10 +60,9 @@ const BookingCalendar = () => {
     }
     
     // In a real application, this would call an API to schedule the session
-    // For this demo, we'll just show a success message and redirect
     toast({
-      title: "Session Scheduled!",
-      description: `Your session has been scheduled for ${date.toLocaleDateString()} at ${selectedTime}.`,
+      title: isReschedule ? "Session Rescheduled!" : "Session Scheduled!",
+      description: `Your session has been ${isReschedule ? 'rescheduled' : 'scheduled'} for ${date.toLocaleDateString()} at ${selectedTime}.`,
     });
     
     navigate("/client/bookings");
@@ -66,7 +78,7 @@ const BookingCalendar = () => {
     }).format(date);
   };
   
-  if (!booking || !session) {
+  if (!bookingId || !creditId) {
     return (
       <MainLayout>
         <div className="container py-8">
@@ -74,7 +86,7 @@ const BookingCalendar = () => {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-              The booking or session information was not found.
+              The booking or session credit information was not found.
               <div className="mt-4">
                 <Button onClick={() => navigate("/client/bookings")}>
                   Return to My Bookings
@@ -90,7 +102,9 @@ const BookingCalendar = () => {
   return (
     <MainLayout>
       <div className="container py-8">
-        <h1 className="text-3xl font-bold mb-2">Schedule Your Session</h1>
+        <h1 className="text-3xl font-bold mb-2">
+          {isReschedule ? 'Reschedule Your Session' : 'Schedule Your Session'}
+        </h1>
         <p className="text-muted-foreground mb-8">
           Choose a date and time that works for you
         </p>
@@ -100,33 +114,51 @@ const BookingCalendar = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Session Details</CardTitle>
-                <CardDescription>Information about the session you're booking</CardDescription>
+                <CardDescription>Information about the session you're {isReschedule ? 'rescheduling' : 'booking'}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h3 className="font-medium">Session Type</h3>
-                  <p>{session.title}</p>
+                  <h3 className="font-medium">Package</h3>
+                  <p>{mockBooking.packageTitle}</p>
+                </div>
+                
+                <div>
+                  <h3 className="font-medium">Therapist</h3>
+                  <div className="flex items-center">
+                    <User className="h-4 w-4 mr-2" />
+                    <span>{mockBooking.therapistName}</span>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="font-medium">Session</h3>
+                  <p>{mockCredit.title}</p>
+                  <p className="text-sm text-muted-foreground">Session {mockCredit.sessionIndex + 1}</p>
                 </div>
                 
                 <div>
                   <h3 className="font-medium">Duration</h3>
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 mr-2" />
-                    <span>{session.duration} minutes</span>
+                    <span>{mockCredit.duration} minutes</span>
                   </div>
                 </div>
                 
-                {session.description && (
+                {mockCredit.description && (
                   <div>
                     <h3 className="font-medium">Description</h3>
-                    <p className="text-sm">{session.description}</p>
+                    <p className="text-sm">{mockCredit.description}</p>
                   </div>
                 )}
                 
-                <div>
-                  <h3 className="font-medium">Package</h3>
-                  <p>Session {sessionIndex + 1} of {booking.sessions?.length}</p>
-                </div>
+                {isReschedule && (
+                  <Alert>
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      You are rescheduling this session. Your previous time slot will be released.
+                    </AlertDescription>
+                  </Alert>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -195,7 +227,7 @@ const BookingCalendar = () => {
                   disabled={!selectedTime || !date}
                   onClick={handleConfirmBooking}
                 >
-                  Confirm Booking
+                  {isReschedule ? 'Reschedule Session' : 'Confirm Booking'}
                 </Button>
               </CardFooter>
             </Card>
