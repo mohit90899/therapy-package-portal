@@ -1,4 +1,3 @@
-
 import { TherapyPackage, User, UserRole, Booking } from "./types";
 
 export const currentUser: User = {
@@ -98,32 +97,164 @@ export const dummyBookings: Booking[] = [
   {
     id: "book001",
     packageId: "pkg001",
+    packageTitle: "Pre-Wedding Therapy Package",
     clientId: "user456",
+    therapistId: "user123",
+    therapistName: "Sarah Johnson",
     purchaseDate: "2023-05-01T09:00:00Z",
-    sessionsRemaining: 4,
+    totalSessions: 6,
+    usedSessions: 2,
+    remainingSessions: 4,
     expiryDate: "2023-12-01T09:00:00Z",
     status: "active",
-    sessions: [
-      { duration: 60, title: "Initial Assessment", completed: true, scheduled: true, scheduledDate: "2023-05-15T10:00:00Z", zoomLink: "https://zoom.us/j/123456", notes: "Great session, discussed initial concerns" },
-      { duration: 45, title: "Communication Styles", completed: false, scheduled: true, scheduledDate: "2023-05-29T10:00:00Z", zoomLink: "https://zoom.us/j/234567" },
-      { duration: 45, title: "Conflict Resolution", completed: false, scheduled: false },
-      { duration: 60, title: "Family Dynamics", completed: false, scheduled: false },
-      { duration: 45, title: "Financial Planning", completed: false, scheduled: false },
-      { duration: 60, title: "Future Planning", completed: false, scheduled: false }
+    totalAmount: 15000,
+    finalAmount: 13500,
+    voucherCode: "WELCOME10",
+    voucherDiscount: 10,
+    sessionCredits: [
+      {
+        id: "credit1",
+        bookingId: "book001",
+        packageId: "pkg001",
+        sessionIndex: 0,
+        status: "completed",
+        therapistId: "user123",
+        duration: 60,
+        title: "Initial Assessment",
+        description: "Getting to know you and your partner",
+        scheduledDate: "2023-05-15T10:00:00Z",
+        recordingUrl: "https://example.com/recording1",
+        notes: "Great session, discussed initial concerns",
+        createdAt: "2023-05-01T09:00:00Z",
+        updatedAt: "2023-05-15T11:00:00Z"
+      },
+      {
+        id: "credit2",
+        bookingId: "book001",
+        packageId: "pkg001",
+        sessionIndex: 1,
+        status: "completed",
+        therapistId: "user123",
+        duration: 45,
+        title: "Communication Styles",
+        description: "Identifying and improving communication patterns",
+        scheduledDate: "2023-05-29T10:00:00Z",
+        recordingUrl: "https://example.com/recording2",
+        notes: "Worked on communication exercises",
+        createdAt: "2023-05-01T09:00:00Z",
+        updatedAt: "2023-05-29T11:00:00Z"
+      },
+      {
+        id: "credit3",
+        bookingId: "book001",
+        packageId: "pkg001",
+        sessionIndex: 2,
+        status: "scheduled",
+        therapistId: "user123",
+        duration: 45,
+        title: "Conflict Resolution",
+        description: "Learning healthy conflict resolution skills",
+        scheduledDate: "2023-06-15T14:00:00Z",
+        zoomLink: "https://zoom.us/j/234567",
+        createdAt: "2023-05-01T09:00:00Z",
+        updatedAt: "2023-06-10T09:00:00Z"
+      },
+      {
+        id: "credit4",
+        bookingId: "book001",
+        packageId: "pkg001",
+        sessionIndex: 3,
+        status: "available",
+        therapistId: "user123",
+        duration: 60,
+        title: "Family Dynamics",
+        description: "Addressing family dynamics and expectations",
+        createdAt: "2023-05-01T09:00:00Z",
+        updatedAt: "2023-05-01T09:00:00Z"
+      },
+      {
+        id: "credit5",
+        bookingId: "book001",
+        packageId: "pkg001",
+        sessionIndex: 4,
+        status: "available",
+        therapistId: "user123",
+        duration: 45,
+        title: "Financial Planning",
+        description: "Discussing financial goals and concerns",
+        createdAt: "2023-05-01T09:00:00Z",
+        updatedAt: "2023-05-01T09:00:00Z"
+      },
+      {
+        id: "credit6",
+        bookingId: "book001",
+        packageId: "pkg001",
+        sessionIndex: 5,
+        status: "available",
+        therapistId: "user123",
+        duration: 60,
+        title: "Future Planning",
+        description: "Creating a shared vision for your future",
+        createdAt: "2023-05-01T09:00:00Z",
+        updatedAt: "2023-05-01T09:00:00Z"
+      }
     ]
   },
   {
     id: "book002",
     packageId: "pkg002",
+    packageTitle: "Job Interview Preparation",
     clientId: "user456",
+    therapistId: "user123",
+    therapistName: "Sarah Johnson",
     purchaseDate: "2023-06-01T14:30:00Z",
-    sessionsRemaining: 3,
+    totalSessions: 3,
+    usedSessions: 0,
+    remainingSessions: 3,
     expiryDate: "2023-09-01T14:30:00Z",
     status: "active",
-    sessions: [
-      { duration: 60, title: "Anxiety Assessment", completed: false, scheduled: false },
-      { duration: 60, title: "Confidence Building", completed: false, scheduled: false },
-      { duration: 60, title: "Mock Interviews", completed: false, scheduled: false }
+    totalAmount: 8000,
+    finalAmount: 8000,
+    sessionCredits: [
+      {
+        id: "credit7",
+        bookingId: "book002",
+        packageId: "pkg002",
+        sessionIndex: 0,
+        status: "available",
+        therapistId: "user123",
+        duration: 60,
+        title: "Anxiety Assessment",
+        description: "Understanding your career goals and interview fears",
+        createdAt: "2023-06-01T14:30:00Z",
+        updatedAt: "2023-06-01T14:30:00Z"
+      },
+      {
+        id: "credit8",
+        bookingId: "book002",
+        packageId: "pkg002",
+        sessionIndex: 1,
+        status: "available",
+        therapistId: "user123",
+        duration: 60,
+        title: "Confidence Building",
+        description: "Techniques to boost confidence and self-presentation",
+        createdAt: "2023-06-01T14:30:00Z",
+        updatedAt: "2023-06-01T14:30:00Z"
+      },
+      {
+        id: "credit9",
+        bookingId: "book002",
+        packageId: "pkg002",
+        sessionIndex: 2,
+        status: "available",
+        therapistId: "user123",
+        duration: 60,
+        title: "Mock Interviews",
+        description: "Practice interviews with real-time feedback",
+        createdAt: "2023-06-01T14:30:00Z",
+        updatedAt: "2023-06-01T14:30:00Z"
+      }
     ]
   }
 ];
