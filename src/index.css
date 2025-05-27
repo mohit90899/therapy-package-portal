@@ -14,56 +14,56 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 18 58% 33%;
+    --primary: 22 23% 42%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 35 25% 85%;
-    --secondary-foreground: 18 58% 15%;
+    --secondary: 46 82% 95%;
+    --secondary-foreground: 22 23% 25%;
 
-    --muted: 35 15% 96%;
+    --muted: 46 50% 96%;
     --muted-foreground: 25 5% 45%;
 
-    --accent: 35 25% 90%;
-    --accent-foreground: 18 58% 25%;
+    --accent: 46 82% 90%;
+    --accent-foreground: 22 23% 30%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 35 15% 88%;
-    --input: 35 15% 88%;
-    --ring: 18 58% 33%;
+    --border: 46 30% 88%;
+    --input: 46 30% 88%;
+    --ring: 22 23% 42%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 18 20% 8%;
-    --foreground: 35 25% 95%;
+    --background: 22 15% 8%;
+    --foreground: 46 50% 95%;
 
-    --card: 18 20% 10%;
-    --card-foreground: 35 25% 95%;
+    --card: 22 15% 10%;
+    --card-foreground: 46 50% 95%;
 
-    --popover: 18 20% 8%;
-    --popover-foreground: 35 25% 95%;
+    --popover: 22 15% 8%;
+    --popover-foreground: 46 50% 95%;
 
-    --primary: 18 58% 45%;
-    --primary-foreground: 18 20% 8%;
+    --primary: 22 23% 55%;
+    --primary-foreground: 22 15% 8%;
 
-    --secondary: 18 20% 15%;
-    --secondary-foreground: 35 25% 85%;
+    --secondary: 22 15% 15%;
+    --secondary-foreground: 46 50% 85%;
 
-    --muted: 18 15% 15%;
-    --muted-foreground: 35 10% 65%;
+    --muted: 22 10% 15%;
+    --muted-foreground: 46 20% 65%;
 
-    --accent: 18 20% 20%;
-    --accent-foreground: 35 25% 85%;
+    --accent: 22 15% 20%;
+    --accent-foreground: 46 50% 85%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 18 15% 20%;
-    --input: 18 15% 20%;
-    --ring: 18 58% 45%;
+    --border: 22 10% 20%;
+    --input: 22 10% 20%;
+    --ring: 22 23% 55%;
   }
 }
 
@@ -83,7 +83,7 @@
 
 .package-card-hover:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(135, 62, 35, 0.15);
+  box-shadow: 0 10px 20px rgba(131, 96, 84, 0.15);
 }
 
 .fade-in {
