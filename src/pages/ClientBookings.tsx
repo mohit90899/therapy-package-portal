@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
@@ -16,7 +15,7 @@ const ClientBookings = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Enhanced dummy bookings with session credits
+  // Enhanced dummy bookings with session credits and commission tracking
   const [bookings, setBookings] = useState<Booking[]>([
     {
       id: "booking1",
@@ -35,6 +34,9 @@ const ClientBookings = () => {
       finalAmount: 449,
       voucherCode: "FIRST10",
       voucherDiscount: 10,
+      platformFee: 157.15, // 35% of 449
+      therapistEarnings: 291.85, // 65% of 449
+      platformEarnings: 157.15, // Same as platform fee
       sessionCredits: [
         {
           id: "credit1",

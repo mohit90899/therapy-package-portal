@@ -71,7 +71,9 @@ const PackageFormWithCommission = ({ onSubmit, onCancel, initialData, therapistN
 
   const handleSubmit = (data: PackageFormValues) => {
     const packageData = {
-      ...data,
+      title: data.title,
+      description: data.description,
+      price: data.price,
       sessions: sessions.length,
       sessionDetails: sessions.map((session, index) => ({
         ...session,
@@ -79,6 +81,7 @@ const PackageFormWithCommission = ({ onSubmit, onCancel, initialData, therapistN
       })),
       tags: data.tags ? data.tags.split(",").map(tag => tag.trim()).filter(Boolean) : [],
       benefits: data.benefits ? data.benefits.split(",").map(benefit => benefit.trim()).filter(Boolean) : [],
+      termsAndConditions: data.termsAndConditions,
       // Commission calculation
       platformFeePercentage,
       therapistEarnings,

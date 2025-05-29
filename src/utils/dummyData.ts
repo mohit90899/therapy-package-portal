@@ -1,3 +1,4 @@
+
 import { TherapyPackage, User, UserRole, Booking } from "./types";
 
 export const currentUser: User = {
@@ -50,7 +51,11 @@ export const dummyPackages: TherapyPackage[] = [
     createdAt: "2023-04-15T10:30:00Z",
     updatedAt: "2023-04-17T14:20:00Z",
     image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=500",
-    tags: ["Couples", "Marriage", "Communication"]
+    tags: ["Couples", "Marriage", "Communication"],
+    // Commission tracking
+    platformFeePercentage: 35,
+    therapistEarnings: 9750, // 65% of 15000
+    platformEarnings: 5250 // 35% of 15000
   },
   {
     id: "pkg002",
@@ -69,7 +74,11 @@ export const dummyPackages: TherapyPackage[] = [
     createdAt: "2023-05-20T09:15:00Z",
     updatedAt: "2023-05-21T11:40:00Z",
     image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=500",
-    tags: ["Career", "Anxiety", "Confidence"]
+    tags: ["Career", "Anxiety", "Confidence"],
+    // Commission tracking
+    platformFeePercentage: 35,
+    therapistEarnings: 5200, // 65% of 8000
+    platformEarnings: 2800 // 35% of 8000
   },
   {
     id: "pkg003",
@@ -89,7 +98,11 @@ export const dummyPackages: TherapyPackage[] = [
     createdAt: "2023-06-10T13:45:00Z",
     updatedAt: "2023-06-11T09:30:00Z",
     image: "https://images.unsplash.com/photo-1536640712-4d4c36ff0e4e?w=500",
-    tags: ["Parenting", "Family", "Children"]
+    tags: ["Parenting", "Family", "Children"],
+    // Commission tracking
+    platformFeePercentage: 35,
+    therapistEarnings: 7800, // 65% of 12000
+    platformEarnings: 4200 // 35% of 12000
   }
 ];
 
@@ -111,6 +124,10 @@ export const dummyBookings: Booking[] = [
     finalAmount: 13500,
     voucherCode: "WELCOME10",
     voucherDiscount: 10,
+    // Commission tracking
+    platformFee: 4725, // 35% of 13500
+    therapistEarnings: 8775, // 65% of 13500
+    platformEarnings: 4725, // Same as platform fee
     sessionCredits: [
       {
         id: "credit1",
@@ -215,6 +232,10 @@ export const dummyBookings: Booking[] = [
     status: "active",
     totalAmount: 8000,
     finalAmount: 8000,
+    // Commission tracking
+    platformFee: 2800, // 35% of 8000
+    therapistEarnings: 5200, // 65% of 8000
+    platformEarnings: 2800, // Same as platform fee
     sessionCredits: [
       {
         id: "credit7",
