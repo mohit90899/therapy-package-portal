@@ -48,6 +48,10 @@ export interface TherapyPackage {
     url: string;
   }[];
   benefits?: string[]; // Added for package benefits
+  // Commission tracking
+  platformFeePercentage?: number; // Default 35%
+  therapistEarnings?: number; // Calculated amount after commission
+  platformEarnings?: number; // Commission amount
 }
 
 export interface SessionCredit {
@@ -86,6 +90,34 @@ export interface Booking {
   sessionCredits: SessionCredit[]; // Track individual session credits
   totalAmount: number;
   finalAmount: number; // After voucher discount
+  // Commission tracking
+  platformFee: number; // 35% commission
+  therapistEarnings: number; // Amount after commission
+  platformEarnings: number; // Commission amount
+}
+
+// New B2C booking type for pay-per-session
+export interface B2CBooking {
+  id: string;
+  clientId: string;
+  therapistId: string;
+  therapistName: string;
+  sessionTitle: string;
+  sessionDescription?: string;
+  duration: number; // in minutes
+  price: number;
+  scheduledDate: string;
+  status: "scheduled" | "completed" | "cancelled" | "no-show";
+  zoomLink?: string;
+  recordingUrl?: string;
+  notes?: string;
+  paymentStatus: "pending" | "paid" | "refunded";
+  createdAt: string;
+  updatedAt: string;
+  // Commission tracking
+  platformFee: number; // 35% commission
+  therapistEarnings: number; // Amount after commission
+  platformEarnings: number; // Commission amount
 }
 
 export interface Session {
@@ -134,4 +166,8 @@ export interface AdminStats {
   totalRevenue: number;
   completedSessions: number;
   pendingApprovals: number;
+  // Commission tracking
+  totalPlatformEarnings: number;
+  totalTherapistPayouts: number;
+  averageCommissionRate: number;
 }
