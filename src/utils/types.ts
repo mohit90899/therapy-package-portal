@@ -26,6 +26,19 @@ export interface TherapySession {
   recordingUrl?: string;
   notes?: string;
   sessionIndex?: number; // Track which session this is in the package
+  participants?: "individual" | "couple" | "family" | "custom"; // Session participant type
+  participantDetails?: string; // Custom description of who should attend
+}
+
+export interface PackageTemplate {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  suggestedSessions: number;
+  defaultSessionDetails: TherapySession[];
+  samplePrice: number;
+  tags: string[];
 }
 
 export interface TherapyPackage {
@@ -48,10 +61,26 @@ export interface TherapyPackage {
     url: string;
   }[];
   benefits?: string[]; // Added for package benefits
+  // New fields based on requirements
+  languages: string[]; // Languages package can be conducted in
+  mode: "video" | "audio+video"; // Session mode
+  category: string; // Package category (pre-wedding, job prep, etc.)
+  maxParticipants: number; // Maximum participants per session
+  files?: {
+    title: string;
+    url: string;
+    type: "pdf" | "video" | "image" | "link";
+  }[];
   // Commission tracking
   platformFeePercentage?: number; // Default 35%
   therapistEarnings?: number; // Calculated amount after commission
   platformEarnings?: number; // Commission amount
+  // Analytics
+  viewCount?: number;
+  saveCount?: number;
+  soldCount?: number;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 export interface SessionCredit {
@@ -70,6 +99,8 @@ export interface SessionCredit {
   notes?: string;
   createdAt: string;
   updatedAt: string;
+  participants?: string[]; // Array of user IDs who should attend this session
+  participantType?: "individual" | "couple" | "family" | "custom";
 }
 
 export interface Booking {
@@ -90,6 +121,7 @@ export interface Booking {
   sessionCredits: SessionCredit[]; // Track individual session credits
   totalAmount: number;
   finalAmount: number; // After voucher discount
+  positivtyAgent?: string; // Agent who recommended the package
   // Commission tracking
   platformFee: number; // 35% commission
   therapistEarnings: number; // Amount after commission
@@ -170,4 +202,19 @@ export interface AdminStats {
   totalPlatformEarnings: number;
   totalTherapistPayouts: number;
   averageCommissionRate: number;
+  // New analytics
+  packagesCreatedThisMonth: number;
+  therapistsWithPackages: number;
+  therapistsWithoutPackages: number;
+  packagesByCategory: { [key: string]: number };
+  packagePopularity: {
+    mostViewed: string[];
+    mostSaved: string[];
+    bestSelling: string[];
+  };
+  troubleTickets: {
+    open: number;
+    inProgress: number;
+    resolved: number;
+  };
 }
