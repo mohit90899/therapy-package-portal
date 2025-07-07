@@ -112,6 +112,11 @@ const PackageForm = ({
       therapistName: currentUser.name,
       termsAndConditions: values.termsAndConditions,
       documents: documents,
+      // Add required fields with default values
+      category: "General",
+      languages: ["English"],
+      mode: "video",
+      maxParticipants: 1,
     });
   };
 

@@ -1,4 +1,3 @@
-
 import { TherapyPackage, User, UserRole, Booking } from "./types";
 
 export const currentUser: User = {
@@ -55,7 +54,12 @@ export const dummyPackages: TherapyPackage[] = [
     // Commission tracking
     platformFeePercentage: 35,
     therapistEarnings: 9750, // 65% of 15000
-    platformEarnings: 5250 // 35% of 15000
+    platformEarnings: 5250, // 35% of 15000
+    // Required new fields
+    category: "Pre-Wedding",
+    languages: ["English"],
+    mode: "video",
+    maxParticipants: 2
   },
   {
     id: "pkg002",
@@ -78,7 +82,12 @@ export const dummyPackages: TherapyPackage[] = [
     // Commission tracking
     platformFeePercentage: 35,
     therapistEarnings: 5200, // 65% of 8000
-    platformEarnings: 2800 // 35% of 8000
+    platformEarnings: 2800, // 35% of 8000
+    // Required new fields
+    category: "Career",
+    languages: ["English"],
+    mode: "video",
+    maxParticipants: 1
   },
   {
     id: "pkg003",
@@ -102,7 +111,12 @@ export const dummyPackages: TherapyPackage[] = [
     // Commission tracking
     platformFeePercentage: 35,
     therapistEarnings: 7800, // 65% of 12000
-    platformEarnings: 4200 // 35% of 12000
+    platformEarnings: 4200, // 35% of 12000
+    // Required new fields
+    category: "Parenting",
+    languages: ["English"],
+    mode: "video",
+    maxParticipants: 2
   }
 ];
 

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -85,7 +84,12 @@ const PackageFormWithCommission = ({ onSubmit, onCancel, initialData, therapistN
       // Commission calculation
       platformFeePercentage,
       therapistEarnings,
-      platformEarnings: platformFee
+      platformEarnings: platformFee,
+      // Add required fields with default values
+      category: "General",
+      languages: ["English"],
+      mode: "video" as const,
+      maxParticipants: 1,
     };
 
     onSubmit(packageData);
